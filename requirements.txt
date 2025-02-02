@@ -1,0 +1,7 @@
+typer
+matplotlib
+jupyter
+numpy
+sklearn
+pandas
+seaborn
