@@ -56,11 +56,8 @@ Epoch 5000, Loss: 0.091905
 ## 📈 Results
 | Model | Accuracy (%) |
 |------------|------------|
-| Custom Neural Network | **96.49%** |
-| Logistic Regression | 92-95% |
-| SVM | 95-97% |
-| Random Forest | 95-97% |
-| Gradient Boosting | **98-99%** |
+| Custom Neural Network | **95.61%** |
+| TensorFlow Model | **97.37%** |
 
 🔹 **Our model achieves competitive accuracy (~96.49%)**, slightly behind top-performing classifiers like Gradient Boosting and SVM.
 
