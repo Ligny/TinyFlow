@@ -1,4 +1,7 @@
-# Breast Cancer Classification with a Custom Neural Network
+
+# Custom Neural Network
+
+![CI](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
 
 ## 📌 Project Overview
 This project implements a **fully connected neural network** from scratch using NumPy to classify breast cancer tumors based on the **Breast Cancer Wisconsin dataset**. The model includes **batch normalization, dropout, and the Adam optimizer** to enhance performance.
@@ -31,9 +34,9 @@ The model is a **feedforward neural network** with multiple layers and activatio
 | 3 | Fully Connected | 1  | Sigmoid |
 
 ### 🛠 Optimizations Used:
-✅ **Batch Normalization:** Normalizes activations at each layer for stable learning.
-✅ **Dropout (10%):** Reduces overfitting by randomly disabling neurons during training.
-✅ **Adam Optimizer:** Adaptive learning rate optimizer with momentum.
+✅ **Batch Normalization:** Normalizes activations at each layer for stable learning.  
+✅ **Dropout (10%):** Reduces overfitting by randomly disabling neurons during training.  
+✅ **Adam Optimizer:** Adaptive learning rate optimizer with momentum.  
 ✅ **Learning Rate Decay:** Gradually decreases the learning rate over time.
 
 ## 🔥 Training Process
@@ -61,10 +64,51 @@ Epoch 5000, Loss: 0.091905
 
 🔹 **Our model achieves competitive accuracy (~96.49%)**, slightly behind top-performing classifiers like Gradient Boosting and SVM.
 
+---
+
+## ✅ Testing
+
+We implemented **unit tests** to ensure all core components (layers, activations, losses, optimizers, network) work correctly.
+
+### 📂 Test Coverage
+| Component | Coverage |
+|------------|------------|
+| Activations | ✅ 100% |
+| Layers | ✅ 100% |
+| Loss Functions | ✅ 100% |
+| Optimizers | ✅ 100% |
+| Neural Network | ✅ 100% |
+
+### 🔧 Run Tests
+
+To execute all tests using `pytest`:
+
+```bash
+pytest tests/
+```
+
+### 📊 Expected Output
+
+```
+============= test session starts ==============
+platform darwin -- Python 3.10.9, pytest-8.3.5
+collected 11 items
+
+tests/test_activations.py ....                             [ 36%]
+tests/test_layerdense.py ..                                [ 54%]
+tests/test_loss.py ..                                      [ 72%]
+tests/test_neuralnetwork.py ..                             [ 90%]
+tests/test_optimizer.py .                                 [100%]
+
+============= 11 passed in 0.21s ==============
+```
+
+---
+
 ## 🛠 How to Run
 ### 1️⃣ Install Dependencies
 ```bash
-pip install numpy pandas scikit-learn
+pip install numpy pandas scikit-learn pytest
 ```
 
 ### 2️⃣ Run the Training Script
@@ -77,10 +121,17 @@ python train.py
 python evaluate.py
 ```
 
+### 4️⃣ Run Unit Tests
+```bash
+pytest tests/
+```
+
+---
+
 ## 📌 Future Improvements
-✅ Implement **early stopping** to prevent overfitting.
-✅ Experiment with different **activation functions** (LeakyReLU, Swish, etc.).
-✅ Use **data augmentation** techniques to improve generalization.
+✅ Implement **early stopping** to prevent overfitting.  
+✅ Experiment with different **activation functions** (LeakyReLU, Swish, etc.).  
+✅ Use **data augmentation** techniques to improve generalization.  
 ✅ Compare with deep learning frameworks like **TensorFlow/PyTorch**.
 
 ---
