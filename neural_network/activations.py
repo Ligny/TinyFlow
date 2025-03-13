@@ -21,12 +21,13 @@ class ActivationSigmoid:
     def backward(self, d_values: np.ndarray) -> np.ndarray:
         return d_values * self.output * (1 - self.output)
       
-class ActivationLeakyReLU:
+class ActivationSoftmax:
     def forward(self, inputs: np.ndarray) -> np.ndarray:
-        self.output = np.where(inputs > 0, inputs, 0.01 * inputs)
+        exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
+        self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
         return self.output
 
     def backward(self, d_values: np.ndarray) -> np.ndarray:
-        d_inputs = np.ones_like(d_values)
-        d_inputs[d_values < 0] = 0.01
-        return d_inputs
+        # Backprop à gérer directement avec la cross-entropy
+        self.dinputs = d_values
+        return self.dinputs
