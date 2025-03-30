@@ -74,8 +74,6 @@ class LayerSoftmaxCrossEntropy:
             correct_confidences = np.take_along_axis(clipped_output, np.argmax(y_true, axis=1, keepdims=True), axis=1).flatten()
             self.loss = -np.mean(np.log(correct_confidences))
             return self.output, self.loss
-
-        print(f"📊 Forward LayerSoftmaxCrossEntropy | Inputs: {inputs.shape} | Weights: {self.weights.shape} | Biases: {self.biases.shape}")
         return self.output
 
     def backward(self, y_true: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:

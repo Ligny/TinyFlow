@@ -7,7 +7,7 @@ class ActivationReLU:
         self.output = np.maximum(0, inputs)
         return self.output
 
-    def backward(self, d_values: np.ndarray) -> np.ndarray:
+    def backward(self, d_values: np.ndarray, *args, **kwargs) -> np.ndarray:
         d_inputs = d_values.copy()
         d_inputs[self.output <= 0] = 0
         return d_inputs
@@ -18,7 +18,7 @@ class ActivationSigmoid:
         self.output = 1 / (1 + np.exp(-inputs))
         return self.output
 
-    def backward(self, d_values: np.ndarray) -> np.ndarray:
+    def backward(self, d_values: np.ndarray, *args, **kwargs) -> np.ndarray:
         return d_values * self.output * (1 - self.output)
       
 class ActivationSoftmax:
@@ -27,7 +27,6 @@ class ActivationSoftmax:
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
         return self.output
 
-    def backward(self, d_values: np.ndarray) -> np.ndarray:
-        # Backprop à gérer directement avec la cross-entropy
+    def backward(self, d_values: np.ndarray, *args, **kwargs) -> np.ndarray:
         self.dinputs = d_values
         return self.dinputs

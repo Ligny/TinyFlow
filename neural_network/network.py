@@ -7,9 +7,7 @@ from neural_network.loss import Loss
 class NeuralNetwork:
     def __init__(self, layers: List, loss_function: Optional[Loss] = None):
         self.layers = layers
-        self.loss_function = loss_function  # Optionnel pour le cas binaire
-
-        # Ces deux attributs sont nécessaires pour le cas binaire
+        self.loss_function = loss_function
         self.last_output = None
         self.last_loss = None
 
@@ -18,11 +16,12 @@ class NeuralNetwork:
             if isinstance(layer, LayerSoftmaxCrossEntropy):
                 if y_true is not None:
                     self.last_output, self.last_loss = layer.forward(inputs, y_true)
+                    return self.last_output
                 else:
-                    self.last_output = layer.forward(inputs)  # Pas de loss en mode prédiction
+                    self.last_output = layer.forward(inputs)
+                    return self.last_output
             else:
                 inputs = layer.forward(inputs)
-
         self.last_output = inputs
         return self.last_output
 
@@ -41,7 +40,8 @@ class NeuralNetwork:
 
         for layer in reversed(self.layers[:-1] if isinstance(self.layers[-1], LayerSoftmaxCrossEntropy) else self.layers):
             loss_gradients = layer.backward(loss_gradients, optimizer.learning_rate)
-            optimizer.update(layer, layer.d_weights, layer.d_biases)
+            if hasattr(layer, "weights") and hasattr(layer, "d_weights"):
+                optimizer.update(layer, layer.d_weights, layer.d_biases)
 
     def train(self, dataset: List[Tuple[np.ndarray, np.ndarray]], epochs: int = 1000, batch_size: int = 32, optimizer: AdamOptimizer = None) -> None:
         X_train, y_train = zip(*dataset)
