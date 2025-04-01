@@ -1,5 +1,4 @@
-
-# Mini TensorFlow
+# TinyFlow (Mini TensorFlow)
 
 ![CI](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
 
