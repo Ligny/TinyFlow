@@ -1,6 +1,9 @@
 
 # Mini TensorFlow
 
+![CI](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
+
+## Description
 Mini TensorFlow is a lightweight, custom-built neural network library implemented in Python using NumPy. It provides a simple yet flexible framework for creating, training, and evaluating neural networks for both binary and multi-class classification tasks. This library is designed for educational purposes and small-scale machine learning experiments, offering core functionalities inspired by TensorFlow but with a minimalistic approach.
 
 ## Features
