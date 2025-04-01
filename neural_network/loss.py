@@ -1,5 +1,4 @@
 import numpy as np
-from typing import List
 
 class Loss:
     def forward(self, predicted: np.ndarray, actual: np.ndarray) -> float:
@@ -13,18 +12,15 @@ class LossMSE(Loss):
         return np.mean((predicted - actual) ** 2)
 
     def backward(self, predicted: np.ndarray, actual: np.ndarray) -> np.ndarray:
-        samples = len(actual)
-        return 2 * (predicted - actual) / samples
+        return 2 * (predicted - actual) / len(actual)
 
 class LossCrossEntropy(Loss):
     def forward(self, predicted: np.ndarray, actual: np.ndarray) -> float:
-        epsilon = 1e-9 
-        predicted = np.clip(predicted, epsilon, 1 - epsilon)
+        predicted = np.clip(predicted, 1e-9, 1 - 1e-9)
         return -np.mean(actual * np.log(predicted) + (1 - actual) * np.log(1 - predicted))
 
     def backward(self, predicted: np.ndarray, actual: np.ndarray) -> np.ndarray:
-        epsilon = 1e-9
-        predicted = np.clip(predicted, epsilon, 1 - epsilon)
+        predicted = np.clip(predicted, 1e-9, 1 - 1e-9)
         return -(actual / predicted) + (1 - actual) / (1 - predicted)
 
 class LossCategoricalCrossentropy(Loss):
@@ -34,6 +30,5 @@ class LossCategoricalCrossentropy(Loss):
         return -np.mean(np.log(correct_confidences))
 
     def backward(self, predicted: np.ndarray, actual: np.ndarray) -> np.ndarray:
-        samples = predicted.shape[0]
         predicted = np.clip(predicted, 1e-7, 1 - 1e-7)
-        return -actual / predicted / samples
+        return -actual / predicted / predicted.shape[0]

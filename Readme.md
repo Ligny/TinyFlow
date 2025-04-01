@@ -1,141 +1,150 @@
 
-# Custom Neural Network
+# Mini TensorFlow
 
-![CI](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
+Mini TensorFlow is a lightweight, custom-built neural network library implemented in Python using NumPy. It provides a simple yet flexible framework for creating, training, and evaluating neural networks for both binary and multi-class classification tasks. This library is designed for educational purposes and small-scale machine learning experiments, offering core functionalities inspired by TensorFlow but with a minimalistic approach.
 
-## 📌 Project Overview
-This project implements a **fully connected neural network** from scratch using NumPy to classify breast cancer tumors based on the **Breast Cancer Wisconsin dataset**. The model includes **batch normalization, dropout, and the Adam optimizer** to enhance performance.
+## Features
+- **Modular Layers**: Dense layers with ReLU/Sigmoid/Softmax activations, dropout, and optional layer normalization.
+- **Loss Functions**: Mean Squared Error (MSE), Binary Cross-Entropy, and Categorical Cross-Entropy.
+- **Optimizer**: Adam optimizer with gradient clipping, learning rate decay, and L2 regularization.
+- **Flexible Architecture**: Supports custom network configurations for binary and multi-class problems.
+- **Examples**: Includes scripts to train and evaluate models on Breast Cancer (binary) and Iris (multi-class) datasets.
 
-## 📊 Dataset: Breast Cancer Wisconsin (Diagnostic)
-The dataset is obtained from **scikit-learn** (`load_breast_cancer`) and consists of **30 features** extracted from digitized images of breast mass. The goal is to classify whether a tumor is **malignant (1) or benign (0)**.
+## Installation
 
-### 🔹 Features:
-- **Mean, standard error, and worst values** of ten real-valued features, such as:
-  - Radius
-  - Texture
-  - Perimeter
-  - Area
-  - Smoothness, etc.
+1. **Clone this repository**:
+   ```bash
+   git clone https://github.com/yourusername/mini-tensorflow.git
+   cd mini-tensorflow
+   ```
 
-### 🔹 Dataset Summary:
-- **Samples:** 569
-- **Features:** 30 (all numerical)
-- **Classes:** Malignant (212), Benign (357)
-- **Train/Test Split:** 80% training, 20% testing
-- **Scaling:** Standardized using `StandardScaler()`
+2. **Install dependencies**:
+   ```bash
+   pip install numpy sklearn
+   ```
 
-## ⚙️ Neural Network Architecture
-The model is a **feedforward neural network** with multiple layers and activations:
+3. **Optional: Install TensorFlow for comparison scripts**:
+   ```bash
+   pip install tensorflow
+   ```
 
-| Layer | Type  | Neurons | Activation |
-|--------|------------|------------|------------|
-| 1 | Fully Connected | 64 | ReLU |
-| 2 | Fully Connected | 32 | ReLU |
-| 3 | Fully Connected | 1  | Sigmoid |
+4. **Ensure the project structure is set up correctly**:
+   ```
+   mini-tensorflow/
+   ├── neural_network/
+   │   ├── activations.py
+   │   ├── layers.py
+   │   ├── loss.py
+   │   ├── network.py
+   │   └── optimizers.py
+   ├── examples/
+   │   ├── compare_breast_cancer.py
+   │   └── compare_iris.py
+   └── README.md
+   ```
 
-### 🛠 Optimizations Used:
-✅ **Batch Normalization:** Normalizes activations at each layer for stable learning.  
-✅ **Dropout (10%):** Reduces overfitting by randomly disabling neurons during training.  
-✅ **Adam Optimizer:** Adaptive learning rate optimizer with momentum.  
-✅ **Learning Rate Decay:** Gradually decreases the learning rate over time.
+## Usage
 
-## 🔥 Training Process
-- **Loss Function:** Binary Cross-Entropy
-- **Batch Size:** 32
-- **Epochs:** 5000
-- **Initial Learning Rate:** 0.8
-- **Decay Rate:** 0.0001 (reduces LR over time)
+Mini TensorFlow provides two example scripts to demonstrate its capabilities:
 
-### 🚀 Training Output (Example)
-```
-Epoch 0, Loss: 0.182399
-Epoch 100, Loss: 0.176083
-Epoch 500, Loss: 0.236471
-Epoch 1000, Loss: 0.110408
-Epoch 5000, Loss: 0.091905
-✅ Accuracy: 96.49%
-```
+### Running Examples
 
-## 📈 Results
-| Model | Accuracy (%) |
-|------------|------------|
-| Custom Neural Network | **95.61%** |
-| TensorFlow Model | **97.37%** |
-
-🔹 **Our model achieves competitive accuracy (~96.49%)**, slightly behind top-performing classifiers like Gradient Boosting and SVM.
-
----
-
-## ✅ Testing
-
-We implemented **unit tests** to ensure all core components (layers, activations, losses, optimizers, network) work correctly.
-
-### 📂 Test Coverage
-| Component | Coverage |
-|------------|------------|
-| Activations | ✅ 100% |
-| Layers | ✅ 100% |
-| Loss Functions | ✅ 100% |
-| Optimizers | ✅ 100% |
-| Neural Network | ✅ 100% |
-
-### 🔧 Run Tests
-
-To execute all tests using `pytest`:
-
+**Breast Cancer (Binary Classification)**:
 ```bash
-pytest tests/
+python examples/compare_breast_cancer.py
 ```
+This trains a neural network on the Breast Cancer dataset and outputs the accuracy and training time.
 
-### 📊 Expected Output
-
-```
-============= test session starts ==============
-platform darwin -- Python 3.10.9, pytest-8.3.5
-collected 11 items
-
-tests/test_activations.py ....                             [ 36%]
-tests/test_layerdense.py ..                                [ 54%]
-tests/test_loss.py ..                                      [ 72%]
-tests/test_neuralnetwork.py ..                             [ 90%]
-tests/test_optimizer.py .                                 [100%]
-
-============= 11 passed in 0.21s ==============
-```
-
----
-
-## 🛠 How to Run
-### 1️⃣ Install Dependencies
+**Iris (Multi-Class Classification)**:
 ```bash
-pip install numpy pandas scikit-learn pytest
+python examples/compare_iris.py
+```
+This trains a neural network on the Iris dataset and displays accuracy along with an example prediction.
+
+### Building Your Own Model
+
+**Define the Network**:
+```python
+from neural_network.network import NeuralNetwork
+from neural_network.layers import LayerDense, LayerSoftmaxCrossEntropy
+from neural_network.activations import ActivationReLU, ActivationSigmoid
+from neural_network.loss import LossCrossEntropy
+from neural_network.optimizers import AdamOptimizer
+
+# Example: Binary classification network
+model = NeuralNetwork([
+    LayerDense(input_dim=30, n_neurons=64, activation=ActivationReLU(), dropout_rate=0.02),
+    LayerDense(64, 32, activation=ActivationReLU(), dropout_rate=0.02),
+    LayerDense(32, 1, activation=ActivationSigmoid())
+], loss_function=LossCrossEntropy())
 ```
 
-### 2️⃣ Run the Training Script
-```bash
-python train.py
+**Prepare Data**:
+```python
+import numpy as np
+X_train = np.array([...])  # Your input data (n_samples, n_features)
+y_train = np.array([...])  # Your labels (n_samples, 1) for binary or (n_samples, n_classes) for multi-class
+dataset = list(zip(X_train, y_train))
 ```
 
-### 3️⃣ Evaluate the Model
-```bash
-python evaluate.py
+**Train the Model**:
+```python
+optimizer = AdamOptimizer(learning_rate=0.001, clip_value=5.0, decay=1e-4)
+model.train(dataset, epochs=1000, batch_size=32, optimizer=optimizer)
 ```
 
-### 4️⃣ Run Unit Tests
-```bash
-pytest tests/
+**Evaluate**:
+```python
+X_test = np.array([...])
+y_test = np.array([...])
+accuracy = model.evaluate(X_test, y_test)
 ```
 
----
+## Key Parameters
 
-## 📌 Future Improvements
-✅ Implement **early stopping** to prevent overfitting.  
-✅ Experiment with different **activation functions** (LeakyReLU, Swish, etc.).  
-✅ Use **data augmentation** techniques to improve generalization.  
-✅ Compare with deep learning frameworks like **TensorFlow/PyTorch**.
+### NeuralNetwork
+- `layers`: List of layer objects (e.g., LayerDense, LayerSoftmaxCrossEntropy).
+- `loss_function`: Optional loss object (e.g., LossCrossEntropy) for binary classification; not needed if using LayerSoftmaxCrossEntropy.
 
----
+### LayerDense
+- `n_inputs`: Number of input features.
+- `n_neurons`: Number of neurons in the layer.
+- `activation`: Activation function (e.g., ActivationReLU(), ActivationSigmoid()).
+- `dropout_rate`: Fraction of units to drop (default: 0.05).
+- `layer_norm`: Enable layer normalization (default: False).
 
-💡 **Conclusion:** This project successfully demonstrates how to build a **custom deep learning model from scratch** with essential optimizations. The accuracy is high, and the architecture is flexible for further improvements!
+### LayerSoftmaxCrossEntropy
+- `n_inputs`: Number of input features.
+- `n_neurons`: Number of output classes (for multi-class tasks).
 
-🚀 **Feel free to experiment and improve!**
+### AdamOptimizer
+- `learning_rate`: Initial learning rate (default: 0.001).
+- `beta1`: Exponential decay rate for the first moment (default: 0.9).
+- `beta2`: Exponential decay rate for the second moment (default: 0.999).
+- `epsilon`: Small value to prevent division by zero (default: 1e-8).
+- `clip_value`: Maximum gradient magnitude (default: 5.0).
+- `decay`: Learning rate decay factor (default: 0.0).
+
+### Train Method
+- `dataset`: List of (input, label) tuples.
+- `epochs`: Number of training iterations (default: 1000).
+- `batch_size`: Number of samples per batch (default: 32).
+- `optimizer`: Optimizer instance (e.g., AdamOptimizer).
+
+## Example Output
+
+**For compare_iris.py**:
+```
+Results for Iris Dataset (3 Classes - Multi-class Classification):
+Custom Neural Network Accuracy: 93.33%
+Softmax probabilities: [[0.02 0.95 0.03]]
+True label: 1, Predicted: 1
+```
+
+## Contributing
+
+Feel free to submit issues or pull requests to enhance this library. Suggestions for additional features (e.g., new layers, optimizers) are welcome!
+
+## License
+
+This project is licensed under the MIT License.
