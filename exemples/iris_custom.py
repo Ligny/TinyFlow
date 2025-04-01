@@ -22,7 +22,7 @@ def get_custom_model(input_dim: int, output_dim: int) -> NeuralNetwork:
 def evaluate_custom(network: NeuralNetwork, X_test: np.ndarray, y_test: np.ndarray) -> float:
     correct = 0
     for inputs, expected in zip(X_test, y_test):
-        predicted = network.forward(inputs)
+        predicted = network.forward(inputs)[0]
         predicted_label = np.argmax(predicted)
         expected_label = np.argmax(expected)
         correct += int(predicted_label == expected_label)
@@ -49,12 +49,12 @@ if __name__ == "__main__":
 
     custom_accuracy = evaluate_custom(custom_network, X_test, y_test)
 
-    print(f"Results for Iris Dataset (3 Classes - Multi-class Classification):")
+    print(f"Results for Iris Dataset (Custom Model):")
     print(f"Custom Neural Network Accuracy: {custom_accuracy * 100:.2f}%")
 
     sample = X_test[:1]
     true_label = np.argmax(y_test[:1])
-    predicted = custom_network.forward(sample)
+    predicted = custom_network.forward(sample)[0]  # Aplatir la sortie 2D
     predicted_label = np.argmax(predicted)
 
     print(f"Softmax probabilities: {predicted}")
