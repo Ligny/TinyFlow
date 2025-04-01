@@ -57,39 +57,32 @@ class LayerSoftmaxCrossEntropy:
     def __init__(self, n_inputs: int, n_neurons: int):
         limit = np.sqrt(6 / (n_inputs + n_neurons))
         self.weights = np.random.uniform(-limit, limit, (n_inputs, n_neurons))
-        print(f"Initial weight range: {self.weights.min()} to {self.weights.max()}")
         self.biases = np.zeros((1, n_neurons))
         self.loss = None
 
     def forward(self, inputs: np.ndarray, y_true: np.ndarray = None) -> Tuple[np.ndarray, float]:
         self.inputs = np.atleast_2d(inputs)
         self.z = np.dot(self.inputs, self.weights) + self.biases
-
-        exp_values = np.exp(self.z - np.max(self.z, axis=1, keepdims=True))
-        self.output = exp_values / (np.sum(exp_values, axis=1, keepdims=True) + 1e-7)
-
+        exp_values = np.exp(self.z - np.max(self.z, axis=1, keepdims=True))  # Stabilité numérique
+        self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
         if y_true is not None:
-            clipped_output = np.clip(self.output, 1e-7, 1 - 1e-7)
-            correct_confidences = np.take_along_axis(clipped_output, np.argmax(y_true, axis=1, keepdims=True), axis=1).flatten()
+            self.output = np.clip(self.output, 1e-7, 1 - 1e-7)  # Éviter log(0)
+            correct_confidences = np.sum(self.output * y_true, axis=1)
             self.loss = -np.mean(np.log(correct_confidences))
             return self.output, self.loss
         return self.output
 
     def backward(self, y_true: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         samples = y_true.shape[0]
-        self.dinputs = (self.output - y_true) / samples
+        self.dinputs = (self.output - y_true) / samples  # Gradient Softmax + CrossEntropy combiné
         if np.isnan(self.dinputs).any():
             raise ValueError("NaN detected in dinputs during backward pass!")
-        if np.isnan(self.dinputs).any():
-            raise ValueError("NaN detected in gradients!")
 
         d_weights = np.dot(self.inputs.T, self.dinputs)
         d_biases = np.sum(self.dinputs, axis=0, keepdims=True)
-        print(f"Mean Gradient Weights: {np.mean(d_weights)}, Mean Gradient Biases: {np.mean(d_biases)}")
-
-
         return d_weights, d_biases
+    
 
 class BatchNormalization:
     def __init__(self, n_neurons, momentum=0.9, epsilon=1e-5):
